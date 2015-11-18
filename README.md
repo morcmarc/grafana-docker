@@ -50,6 +50,7 @@ GF_HOST, GF_PORT, GF_USER,GF_PASS
 
 ## Docker compose yml example
 
+```
 grafana:
     image: qapps/grafana-docker
     ports:
@@ -62,5 +63,4 @@ grafana:
 	- DS_PASS=root
 	- DS_USER=root
 	- DS_DB=dbname
-	
-    
+```

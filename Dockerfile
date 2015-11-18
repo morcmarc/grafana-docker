@@ -20,4 +20,4 @@ RUN chmod +x ${GRAFANA_SCR}start.py
 
 EXPOSE 3000
 
-ENTRYPOINT ["${GRAFANA_SCR}start.py"]
+ENTRYPOINT ["/opt/grafana/start.py"]

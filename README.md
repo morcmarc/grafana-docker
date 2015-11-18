@@ -32,7 +32,7 @@ docker run -d -p 3000:3000 \
     -e "DS_IS_DEFAULT=false" \
     -e "DS_JSON_DATA=null" \
     qapps/grafana-docker
-``
+```
 
 All options defined in conf/grafana.ini can be overriden using environment variables, for example:
 
@@ -46,7 +46,7 @@ docker run -i -p 3000:3000 \
 
 ```
 GF_HOST, GF_PORT, GF_USER,GF_PASS
-``
+```
 
 ## Docker compose yml example
 

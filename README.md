@@ -45,7 +45,10 @@ docker run -i -p 3000:3000 \
 ## Additional env
 
 ```
-GF_HOST, GF_PORT, GF_USER,GF_PASS
+GF_HOST - default: localhost
+GF_PORT - default: 3000
+GF_USER - default: admin
+GF_PASS - default: admin
 ```
 
 ## Docker compose yml example

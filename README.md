@@ -3,24 +3,36 @@
 This container builds a container with the
 latest master build of Grafana.
 
-2.0.2 -> 2.1.0 Upgrade NOTICE!
-
-The data and log paths were not correct in the previous image. The grafana database was placed by default in /usr/share/grafana/data instead of the correct path /var/lib/grafana. This means it was not in a dir that was marked as a volume. So if you remove the container it will remove the grafana database. So before updating make sure you copy the /usr/share/grafana/data path from inside the container to the host.
-
-This container currently only contains the latest Grafana release.
-
-
 ## Running your Grafana image
 --------------------------
 
 Start your image binding the external port `3000`.
 
-   docker run -i -p 3000:3000 grafana/grafana
+   docker run -i -p 3000:3000 qapps/grafana-docker
 
 Try it out, default admin user is admin/admin.
 
 
 ## Configuring your Grafana container
+
+Datasource configuration via environment variables, example:
+
+```
+docker run -d -p 3000:3000 \
+    -e "DS_NAME=datasource_name" \
+    -e "DS_TYPE=datasource type (CloudWatch, Graphite, InfluxDB, etc...)" \
+    -e "DS_ACCESS=proxy or direct" \
+    -e "DS_URL=datasource url" \
+    -e "DS_PASS=pass" \
+    -e "DS_USER=user" \
+    -e "DS_DB=dbname" \
+    -e "DS_AUTH=false" \
+    -e "DS_AUTH_USER=" \
+    -e "AUTH_PASS=" \
+    -e "DS_IS_DEFAULT=false" \
+    -e "DS_JSON_DATA=null" \
+    qapps/grafana-docker
+``
 
 All options defined in conf/grafana.ini can be overriden using environment variables, for example:
 
@@ -30,6 +42,25 @@ docker run -i -p 3000:3000 \
   -e "GF_SECURITY_ADMIN_PASSWORD=secret"  \
   grafana/grafana
 ```
+## Additional env
 
+```
+GF_HOST, GF_PORT, GF_USER,GF_PASS
+``
 
+## Docker compose yml example
 
+grafana:
+    image: qapps/grafana-docker
+    ports:
+	- "3000:3000"
+    environment:
+	- DS_NAME=InfluxDB
+	- DS_TYPE=influxdb
+	- DS_ACCESS=proxy
+	- DS_URL=http://localhost:8086
+	- DS_PASS=root
+	- DS_USER=root
+	- DS_DB=dbname
+	
+    

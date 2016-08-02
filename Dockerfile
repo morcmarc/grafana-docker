@@ -1,8 +1,8 @@
 FROM debian:jessie
 
-MAINTAINER Yury Kavaliou qualiapps@gmail.com
+MAINTAINER Marcell Jusztin <hello@morcmarc.com>
 
-ENV GRAFANA_VERSION 2.5.0
+ENV GRAFANA_VERSION 3.1.1
 ENV GRAFANA_SCR /opt/grafana/
 
 RUN apt-get update && \

@@ -2,7 +2,7 @@ FROM debian:jessie
 
 MAINTAINER Marcell Jusztin <hello@morcmarc.com>
 
-ENV GRAFANA_VERSION 3.1.1
+ENV GRAFANA_VERSION 3.1.1-1470047149
 ENV GRAFANA_SCR /opt/grafana/
 
 RUN apt-get update && \

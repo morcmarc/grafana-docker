@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import requests
-from os import getenv
+import os
 from time import sleep
 from urlparse import urlunparse
 from subprocess import Popen, PIPE
@@ -16,29 +16,29 @@ class Grafana(object):
             Init params
         '''
         self.params = {
-            "name": getenv("DS_NAME", "Test datasource"),
-            "type": getenv("DS_TYPE", "graphite"),
-            "access": getenv("DS_ACCESS", "proxy"),
-            "url": getenv("DS_URL", ""),
-            "password": getenv("DS_PASS", ""),
-            "user": getenv("DS_USER", ""),
-            "database": getenv("DS_DB", ""),
-            "basicAuth": getenv("DS_AUTH", 'false'),
-            "basicAuthUser": getenv("DS_AUTH_USER", ""),
-            "basicAuthPassword": getenv("AUTH_PASS", ""),
-            "isDefault": getenv("DS_IS_DEFAULT", 'false'),
-            "jsonData": getenv("DS_JSON_DATA", 'null')
+            "name": os.environ.get("DS_NAME"),
+            "type": os.environ.get("DS_TYPE"),
+            "access": os.environ.get("DS_ACCESS"),
+            "url": os.environ.get("DS_URL"),
+            "password": os.environ.get("DS_PASS"),
+            "user": os.environ.get("DS_USER"),
+            "database": os.environ.get("DS_DB"),
+            "basicAuth": os.environ.get("DS_AUTH"),
+            "basicAuthUser": os.environ.get("DS_AUTH_USER"),
+            "basicAuthPassword": os.environ.get("AUTH_PASS"),
+            "isDefault": os.environ.get("DS_IS_DEFAULT"),
+            "jsonData": os.environ.get("DS_JSON_DATA")
         }
         # Create grafana api path
         self.gf_url = urlunparse(
             (
                 self.scheme,
-                ":".join((getenv("GF_HOST", "localhost"), getenv("GF_PORT", "3000"))),
+                ":".join((os.environ.get("GF_HOST", "localhost"), os.environ.get("GF_PORT", "3000"))),
                 self.api_path, "", "", ""
             )
         )
         # Init requests session
-        self.auth = getenv("GF_USER", "admin"), getenv("GF_PASS", "admin")
+        self.auth = os.environ.get("GF_USER", "admin"), os.environ.get("GF_PASS", "admin")
         self.sess = requests.Session()
 
     def init_datasource(self):

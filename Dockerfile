@@ -21,3 +21,4 @@ RUN chmod +x ${GRAFANA_SCR}start.py
 EXPOSE 3000
 
 ENTRYPOINT ["/opt/grafana/start.py"]
+#ENTRYPOINT ["env"]

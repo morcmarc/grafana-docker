@@ -13,8 +13,6 @@ RUN apt-get update && \
     dpkg -i /tmp/grafana.deb && \
     rm /tmp/grafana.deb
 
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
-
 COPY ./files/start.py ${GRAFANA_SCR}start.py
 RUN chmod +x ${GRAFANA_SCR}start.py
 

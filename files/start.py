@@ -2,6 +2,7 @@
 
 import requests
 import os
+import json
 from time import sleep
 from urlparse import urlunparse
 from subprocess import Popen, PIPE
@@ -41,17 +42,22 @@ class Grafana(object):
         self.auth = os.environ.get("GF_USER", "admin"), os.environ.get("GF_PASS", "admin")
         self.sess = requests.Session()
 
+        print "Parameters: "
+        print json.dumps(self.params)
+
     def init_datasource(self):
         '''
             Upload a datasource
             :return bool
         '''
-        response = False
-        res = self.sess.post(self.gf_url, data=self.params, auth=self.auth)
-        if res.status_code == requests.codes.ok:
-            response = True
 
-        return response
+        try:
+            print "Adding datasource"
+            res = self.sess.post(self.gf_url, data=self.params, auth=self.auth)
+            return True
+        except Exception as message:
+            print "CONNECTION! %s" % message
+            return False
 
     def start(self):
         '''
@@ -69,9 +75,9 @@ class Grafana(object):
             stdout=PIPE
         )
         # wait, until gf api will be available
-        # trying 5 times
+        # trying 10 times
         retry = 0
-        while retry <= 5:
+        while retry <= 10:
             if self._check_gf():
                 status = True
                 break
@@ -87,8 +93,10 @@ class Grafana(object):
         '''
         resp = False
         try:
+            print "Connecting to %s" % self.gf_url
             res = self.sess.get(self.gf_url, auth=self.auth)
             resp = True if res and res.status_code == requests.codes.ok else False
+            print "Success!"
         except Exception as message:
             print "CONNECTION! %s" % message
 
@@ -98,17 +106,23 @@ if __name__ == "__main__":
     gf = Grafana()
     try:
         exit_code = 0
+        retry = 0
         status, gf_proc = gf.start()
         if status:
-            if gf.init_datasource():
-                print "*------------SUCCESS! Your datasource was added!------------*"
-                while True:
-                    # read gf stdout until it terminated
-                    output = gf_proc.stdout.readline()
-                    if output == '' and gf_proc.poll() is not None:
-                        break
-                    if output:
-                        print output.strip()
+            while retry <= 10:
+                if gf.init_datasource():
+                    print "*------------SUCCESS! Your datasource was added!------------*"
+                    while True:
+                        # read gf stdout until it terminated
+                        output = gf_proc.stdout.readline()
+                        if output == '' and gf_proc.poll() is not None:
+                            break
+                        if output:
+                            print output.strip()
+                        sleep(3)
+                else:
+                    print "*------------FAILURE! Failed adding datasource!-------------*"
+                    retry += 1
                     sleep(3)
 
             exit_code = gf_proc.poll()
